@@ -1,21 +1,17 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %}
 
 {% block content %} 
-<h1 align="center">Notes</h1>
-<ul class="list-group list-group-flush" id="notes">
-    {% for note in user.notes %}
-    <li class="list-group-item">{{ note.data }}
-        <button type="button" class="close" onClick="deleteNote({{ note.id }})">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </li>
-    {% endfor %}
+<h1 align="center">Welcome, {{ user.first_name }}! </h1>
+<br>
+<div>
+<h6 align="center">JioEx is a matchmaking application that connects you with other people to exercise with. Ready to exercise and make new friends? Let's get started!</h6>
+</div>
+<br>
+<div>
+<ul class="list-group list-group-flush" id="instructions">
+    <li class="list-group-item"><h4>Profile</h4>View account information. Update personal details.</li>
+    <br>
+    <li class="list-group-item"><h4>JioNow!</h4>Confirm matchmaking details. Begin search for exercise buddies.</li>
 </ul>
-<form method="POST">
-    <textarea name="note" id="note" class="form-control"></textarea>
-    <br />
-    <div align="center">
-        <button type="submit" class="btn btn-primary">Add Note</button>
-    </div>
-</form>
+</div>
 {% endblock %}

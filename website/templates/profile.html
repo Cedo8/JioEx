@@ -6,20 +6,23 @@
 <div class="container rounded bg-white mt-5 mb-5">
     <div class="row">
         <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">Edogaru</span><span class="text-black-50">edogaru@mail.com.my</span><span> </span></div>
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">{{ user.first_name }}</span><span class="text-black-50">{{ user.email }}</span><span> </span></div>
         </div>
         <div class="col-md-5 border-right">
             <div class="p-3 py-5">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4 class="text-right">Profile Settings</h4>
                 </div>
-                <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value={{ user.first_name }}></div>
-                    <div class="col-md-6"><label class="labels">Handle</label><input type="text" class="form-control" placeholder="handle" value={{ user.first_name }}></div>
+                <div class="row mt-3">
+                    <div class="col-md-6"><label class="labels">First Name</label><input name="first_name" id="firstname" type="text" class="form-control" placeholder="first name" value={{ user.first_name }}></div>
+                    <div class="col-md-6"><label class="labels">Twitter Handle</label><input name="twitter_handle" id="twitter_handle" type="text" class="form-control" placeholder="twitter handle" value={{ user.twitter_handle }}></div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Email</label><input type="text" class="form-control" placeholder="enter email" value={{ user.email }}></div>
-                    <div class="col-md-12"><label class="labels">Age</label><input type="text" class="form-control" placeholder="enter age" value={{ user.age }}></div>
+                    <div class="col-md-12"><label class="labels">Email</label><p>{{ user.email }}</p></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6"><label class="labels">Age</label><input name="age" id="age" type="text" class="form-control" placeholder="enter age" value={{ user.age }}></div>
+                    <div class="col-md-6"><label class="labels">Gender</label><p>{{ user.gender }}</p></div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-12"><label class="labels">Message</label>
@@ -32,18 +35,16 @@
         </div>
         <div class="col-md-4">
             <div class="p-3 py-5">
+                <h4 class="text-left">My Interests</h4>
                 <ul class="list-group list-group-flush" id="interests">
                     {% for interest in user.interests %}
                     <li class="list-group-item">{{ interest }}
-                        <button type="button" class="close" onClick="user.interests.remove({{ interest }})">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </li>
                     {% endfor %}
                 </ul>
                 <br>
                 <div class="col-md-12"><label class="labels">Add interests</label>
-                    <textarea name="interest" id="interest" class="form-control"></textarea>
+                    <textarea name="interests" id="interests" class="form-control" placeholder="Add more interests (separate with commas)"></textarea>
                 </div>
             </div>
         </div>

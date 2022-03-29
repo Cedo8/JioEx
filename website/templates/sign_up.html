@@ -24,6 +24,17 @@
         />
     </div>
     <div class="form-group">
+      <label for="twitterHandle">Twitter Handle</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="twitterHandle" 
+        name="twitterHandle"
+        value="@"
+        placeholder="Enter twitter handle"
+      />
+    </div>
+    <div class="form-group">
       <label for="age">Age</label>
       <input 
         type="text" 
@@ -34,7 +45,16 @@
       />
   </div>
   <div class="form-group">
-    <label for="firstName">Interests</label>
+    <label for="gender">Gender</label>
+    <select class="form-select" aria-label="Default select example" id="gender" name="gender">
+      <option selected>Select gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Others">Others</option>
+    </select>
+</div>
+  <div class="form-group">
+    <label for="interests">Interests</label>
     <input 
       type="text" 
       class="form-control" 

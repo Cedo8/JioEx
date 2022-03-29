@@ -6,19 +6,13 @@
 <br />
 <div class="row">
     <div class="col-sm-3 col-md-6" style="background-color:#D6DBDF;">
-        <br/>
-      <h4 align="center">{{ user.first_name }}</h4>
-      <p align="center">{{ user.age }} | {% for interest in user.interests %} {{ interest }} {% endfor %}</p>
+      <div class="d-flex flex-column align-items-center p-4 py-2"><img class="rounded-circle" width="70px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"></div>
+      <h4 align="center">{{ user.first_name }}, {{ user.age }}</h4>
+      <h6 align="center">{% for interest in user.interests %} -{{ interest }}- {% endfor %}</h6>
+      <br>
       <p align="center">{{ user.message }}</p>
-      <form method="POST">
-        <textarea name="message" id="message" class="form-control" placeholder="Update your message to be displayed to other users"></textarea>
-        <br />
-        <div align="right">
-            <button type="submit" class="btn btn-primary">Confirm</button>
-        </div>
-      </form>
       <br/>
-      <p align="center">Please note that these information will be displayed to other users.</p>
+      <p align="center">Please note that these information will be displayed to other users.<br>(Can be updated under 'Profile')</p>
     </div>
     <div class="col-sm-9 col-md-6" style="background-color:#FAE5D3;">
       <br/>
