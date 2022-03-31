@@ -5,6 +5,7 @@ from sqlalchemy.sql import func
 from sqlalchemy.ext.mutable import MutableList
 from sqlalchemy import PickleType
 
+
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     data = db.Column(db.String(10000))
@@ -23,4 +24,9 @@ class User(db.Model, UserMixin):
     gender = db.Column(db.String(10))
     interests = db.Column(MutableList.as_mutable(PickleType), default=[])
     message = db.Column(db.String(10000))
-    vector_representation = db.Column(MutableList.as_mutable(PickleType), default=[])
+    longitude = db.Column(db.REAL)
+    latitude = db.Column(db.REAL)
+    sporty_post = db.Column(db.DECIMAL(0, 6))
+    positive_post = db.Column(db.DECIMAL(0, 6))
+    neutral_post = db.Column(db.DECIMAL(0, 6))
+    negative_post = db.Column(db.DECIMAL(0, 6))

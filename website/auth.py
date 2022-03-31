@@ -4,8 +4,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
+import geocoder
 
 auth = Blueprint('auth', __name__)
+
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -19,23 +21,28 @@ def login():
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
                 # scrape user twitter and update db
-                
-                # log login time to db
+
+                # last scrape the user twitter(scrape once a week)
+
                 # now = datetime.now() --> add this info to user db
+                gps = geocoder.ip('me')
+                user.latitude = gps.latlng[0]
+                user.longitude = gps.latlng[1]
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
             flash('Email does not exist.', category='error')
 
-
     return render_template("login.html", user=current_user)
+
 
 @auth.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
+
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
@@ -49,6 +56,13 @@ def sign_up():
         gender = request.form.get('gender')
         interests_string = request.form.get('interests')
         interests = interests_string.split(",")
+        gps = geocoder.ip('me')
+        latitude = gps.latlng[0]
+        longitude = gps.latlng[1]
+        sporty_post = 0.000000
+        positive_post = 0.000000
+        neutral_post = 0.000000
+        negative_post = 0.000000
 
         user = User.query.filter_by(email=email).first()
 
@@ -67,10 +81,14 @@ def sign_up():
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
         else:
-            new_user = User(email=email, first_name=first_name, twitter_handle=twitter_handle, password=generate_password_hash(password1, method='sha256'), age=age, gender=gender, interests=interests)
+            new_user = User(email=email, first_name=first_name, twitter_handle=twitter_handle,
+                            password=generate_password_hash(password1, method='sha256'), age=age, gender=gender,
+                            interests=interests, latitude=latitude, longitude=longitude, sporty_post=sporty_post,
+                            positive_post=positive_post, neutral_post=neutral_post, negative_post=negative_post)
+
             db.session.add(new_user)
             db.session.commit()
-            #login_user(user, remember=True)
+            # login_user(user, remember=True)
             flash('Account created!', category='success')  # add user to database
             return redirect(url_for('views.home'))
 
