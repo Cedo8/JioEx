@@ -9,5 +9,14 @@ The main goal of the project is to develop a robust matching algorithm that allo
 ### Target Users
 Formally, the target users of JioEx are sports enthusiasts who are looking for people to exercise with. However, we believe that this application can be used by anyone who wants to exercise, regardless of their fitness level or their frequency of workouts.
 
+## Running the website locally
+- Ensure you have a python virtual environment of your choice like `pyenv` or `Anaconda`.
+- Activate your virtual environment.
+- In virtual environment `(venv)`, install dependencies with: `pip install -r requirements.txt`
+- Get your Bearer Token from [twitter developer](https://developer.twitter.com/) and input into line 4 of the tweetRetriever/tweetscraper.py
+- In virtual environment `(venv)`, to run python backend server: `python3 main.py`
+
+Server runs by default at http://127.0.0.1:5000/
+
 ### Resources
 * [tweepy](https://github.com/tweepy/tweepy), a library for Twitter
