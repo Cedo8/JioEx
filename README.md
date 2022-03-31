@@ -13,6 +13,7 @@ Formally, the target users of JioEx are sports enthusiasts who are looking for p
 - Ensure you have a python virtual environment of your choice like `pyenv` or `Anaconda`.
 - Activate your virtual environment.
 - In virtual environment `(venv)`, install dependencies with: `pip install -r requirements.txt`
+- Get your Bearer Token from [twitter developer](https://developer.twitter.com/) and input into line 4 of the tweetRetriever/tweetscraper.py
 - In virtual environment `(venv)`, to run python backend server: `python3 main.py`
 
 Server runs by default at http://127.0.0.1:5000/
