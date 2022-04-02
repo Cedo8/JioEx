@@ -1,0 +1,20 @@
+{% extends "base.html" %} {% block title %}Results{% endblock %}
+
+{% block content %} 
+<h1 align="center">Here are your matches! </h1>
+<div class="mt-5 text-right"><button onclick="history.back()" class="btn btn-primary">< Back</button></div>
+<div>
+<ul class="list-group list-group-flush" id="results">
+    {% for user in user.result %}
+    <li class="list-group-item">
+        <h3>{{ user.first_name }}, {{ user.age }}</h3>
+        <br>
+        <h5>{% for interest in user.interests %} -{{ interest }}- {% endfor %}</h5>
+        <br>
+        <h6>{{ user.message }}</h6>
+    </li>
+    <br>
+    {% endfor %}
+</ul>
+</div>
+{% endblock %}
