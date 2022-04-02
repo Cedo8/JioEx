@@ -2,6 +2,7 @@ from unicodedata import category
 from flask import Blueprint, jsonify, render_template, request, flash
 from flask_login import login_required, current_user
 from .models import Note
+from .models import User
 from . import db
 import json
 
@@ -55,13 +56,28 @@ def profile():
 @views.route('/jionow', methods=['GET', 'POST'])
 @login_required
 def jionow():
+
+    # To be updated to take in current location and activity
     if request.method == 'POST':
         message = request.form.get('message')
         current_user.message = message
         db.session.commit()
         flash('Details Confirmed!', category='success')
 
+        # To add code to send the information to backend for processing
+        test_user1 = User(first_name="Test1", age=22, interests=["Swimming", "Dancing"], message="Hi I am Test1.")
+        test_user2 = User(first_name="Test2", age=19, interests=["Hiking", "Jogging"], message="Hi I am Test2.")
+        current_user.result = [test_user1, test_user2]
+        
+        # Render the results page instead
+        return results()
+
     return render_template("jionow.html", user=current_user)
+
+@views.route('/results', methods=['GET', 'POST'])
+@login_required
+def results():
+    return render_template("results.html", user=current_user)
 
 @views.route('/delete-note', methods=['POST'])
 def delete_note():

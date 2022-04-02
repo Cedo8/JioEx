@@ -30,3 +30,4 @@ class User(db.Model, UserMixin):
     positive_post = db.Column(db.DECIMAL(0, 6))
     neutral_post = db.Column(db.DECIMAL(0, 6))
     negative_post = db.Column(db.DECIMAL(0, 6))
+    result = db.Column(MutableList.as_mutable(PickleType), default=[])  # List of Users
