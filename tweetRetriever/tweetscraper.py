@@ -37,6 +37,5 @@ def search_tweets(query, max_no_result):
     elif max_no_result > 100:
         max_no_result = 100
 
-    tweets = client.search_recent_tweets(query=query, max_results=max_no_result);
+    tweets = client.search_recent_tweets(query=query, max_results=max_no_result, sort_order='relevancy');
     return clean_tweets(tweets.data)
-
