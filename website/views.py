@@ -1,4 +1,3 @@
-from unicodedata import category
 from flask import Blueprint, jsonify, render_template, request, flash
 from flask_login import login_required, current_user
 import json
@@ -59,17 +58,14 @@ def profile():
 @views.route('/jionow', methods=['GET', 'POST'])
 @login_required
 def jionow():
+
+    # To be updated to take in current location and activity
     if request.method == 'POST':
         activity = request.form.get('activity')
         users = User.query.filter(User.interests.contains([activity])).all()
         top10 = scoring.top10(current_user, users)
 
-        return render_template("result.html", top10)
-
-        message = request.form.get('message')
-        current_user.message = message
-        db.session.commit()
-        flash('Details Confirmed!', category='success')
+        return render_template("results.html", user=top10)
 
     lat, lng = gps_locator.current_latlng()
     current_user.latitude = lat
@@ -77,6 +73,11 @@ def jionow():
     current_suburb = gps_locator.find_suburb(lat, lng)
 
     return render_template("jionow.html", user=current_user, suburb=current_suburb)
+
+@views.route('/results', methods=['GET', 'POST'])
+@login_required
+def results():
+    return render_template("results.html", user=current_user)
 
 @views.route('/delete-note', methods=['POST'])
 def delete_note():
