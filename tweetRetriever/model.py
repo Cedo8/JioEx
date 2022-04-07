@@ -49,7 +49,7 @@ def generate_model(path_to_dataset):
     # Model Training and Evaluation
     model.fit(X_train, y_train, epochs=10)
     model.evaluate(X_test, y_test)
-    model.save('./trained_model')
+    model.save('./trained_model.h5')
 
     y_predicted = model.predict(X_test)
     y_predicted = y_predicted.flatten()
@@ -62,7 +62,7 @@ def generate_model(path_to_dataset):
 def classify_tweet(model, tweets):
     tweets_predicted = model.predict(tweets)  # returns an array containing the probability of tweet being fitness-related e.g. [[0.6], [0.4], [0.7]]
     print(tweets_predicted)
-    return np.where(tweets_predicted > 0.5, 1, 0)  # returns an array containing the predictions e.g. [[1], [0], [1]]
+    return np.where(tweets_predicted > 0.55, 1, 0)  # returns an array containing the predictions e.g. [[1], [0], [1]]
 
 
 def calculate_fitness(prediction_array):
@@ -75,11 +75,11 @@ def calculate_fitness(prediction_array):
 
 
 if __name__ == '__main__':
-    if not os.path.exists('./trained_model'):
+    if not os.path.exists('./trained_model.h5'):
         generate_model('./dataset.csv')
     else:
         print("Model already trained.")
     
-    model = tf.keras.models.load_model('./trained_model')
+    model = tf.keras.models.load_model('./trained_model.h5', custom_objects={'KerasLayer':hub.KerasLayer})
     prediction_array = classify_tweet(model, ["What a great workout!", "This assignment is so difficult..."])
     print(calculate_fitness(prediction_array))

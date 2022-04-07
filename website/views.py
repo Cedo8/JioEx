@@ -30,24 +30,27 @@ def profile():
     if request.method == 'POST':
         first_name = request.form.get('first_name')
         twitter_handle = request.form.get('twitter_handle')
+        tele_handle = request.form.get('tele_handle')
         age = request.form.get('age')
         message = request.form.get('message')
         additional_interests_string = request.form.get('interests')
         additional_interests = additional_interests_string.split(",")
+        if len(additional_interests) == 1 and additional_interests[0] == '':
+            additional_interests = []
 
         if len(first_name) < 2:
             flash('First name must be greater than 1 character.', category='error')
         elif not age.isdigit():
             flash('Age must be a numerical value.', category='error')
-        elif len(message) < 2:
-            flash('Message must contain more than 1 character.', category='error')
         else:
             current_user.first_name = first_name
             current_user.twitter_handle = twitter_handle
+            current_user.tele_handle = tele_handle
             current_user.age = int(age)
-            current_user.message = message
-            for interest in additional_interests:
-                current_user.interests.append(interest)
+            current_user.message = message if len(message) > 0 else current_user.message
+            if len(additional_interests) > 0:
+                for interest in additional_interests:
+                    current_user.interests.append(interest)
             db.session.commit()
             flash('Profile updated!', category='success')
         
@@ -65,8 +68,8 @@ def jionow():
         flash('Details Confirmed!', category='success')
 
         # To add code to send the information to backend for processing
-        test_user1 = User(first_name="Test1", age=22, interests=["Swimming", "Dancing"], message="Hi I am Test1.")
-        test_user2 = User(first_name="Test2", age=19, interests=["Hiking", "Jogging"], message="Hi I am Test2.")
+        test_user1 = User(first_name="Test1", age=22, interests=["Swimming", "Dancing"], message="Hi I am Test1.", tele_handle="@Cedo8")
+        test_user2 = User(first_name="Test2", age=19, interests=["Hiking", "Jogging"], message="Hi I am Test2.", tele_handle="@Cedo8")
         current_user.result = [test_user1, test_user2]
         
         # Render the results page instead

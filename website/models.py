@@ -15,15 +15,20 @@ class Note(db.Model):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+
+    # For Profile
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     twitter_handle = db.Column(db.String(150))
-    notes = db.relationship('Note')
+    tele_handle = db.Column(db.String(150))
+    notes = db.relationship('Note')  # To be removed
     age = db.Column(db.Integer)
     gender = db.Column(db.String(10))
     interests = db.Column(MutableList.as_mutable(PickleType), default=[])
     message = db.Column(db.String(10000))
+
+    # For algorithm processing
     longitude = db.Column(db.REAL)
     latitude = db.Column(db.REAL)
     sporty_post = db.Column(db.DECIMAL(0, 6))

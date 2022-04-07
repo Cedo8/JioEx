@@ -12,6 +12,7 @@
         <h5>{% for interest in user.interests %} -{{ interest }}- {% endfor %}</h5>
         <br>
         <h6>{{ user.message }}</h6>
+        <div class="d-flex flex-column align-items-center p-4 py-2"><a href={{ "https://t.me/" + user.tele_handle[1:] }}><img class="rounded-circle" width="30px" src="https://www.freepnglogos.com/uploads/telegram-logo-png-0.png"></a></div>
     </li>
     <br>
     {% endfor %}
