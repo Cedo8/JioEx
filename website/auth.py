@@ -50,6 +50,7 @@ def sign_up():
         email = request.form.get('email')
         first_name = request.form.get('firstName')
         twitter_handle = request.form.get('twitterHandle')
+        tele_handle = request.form.get('teleHandle')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         age = request.form.get('age')
@@ -72,6 +73,10 @@ def sign_up():
             flash('Email must be greater than 3 characters.', category='error')
         elif len(first_name) < 2:
             flash('First name must be greater than 1 character.', category='error')
+        elif len(twitter_handle) < 2:
+            flash('Please enter a valid twitter handle', category='error')
+        elif len(tele_handle) < 2:
+            flash('Please enter a valid telegram handle', category='error')
         elif not age.isdigit():
             flash('Age must be a numerical value.', category='error')
         elif gender == "Select gender":
@@ -81,7 +86,7 @@ def sign_up():
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
         else:
-            new_user = User(email=email, first_name=first_name, twitter_handle=twitter_handle,
+            new_user = User(email=email, first_name=first_name, twitter_handle=twitter_handle, tele_handle=tele_handle,
                             password=generate_password_hash(password1, method='sha256'), age=age, gender=gender,
                             interests=interests, latitude=latitude, longitude=longitude, sporty_post=sporty_post,
                             positive_post=positive_post, neutral_post=neutral_post, negative_post=negative_post)
