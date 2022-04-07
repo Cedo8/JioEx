@@ -1,9 +1,13 @@
 from unicodedata import category
 from flask import Blueprint, jsonify, render_template, request, flash
 from flask_login import login_required, current_user
+import json
+
 from .models import Note
 from . import db
-import json
+from .models import User
+from . import gps_locator
+from . import scoring
 
 views = Blueprint('views', __name__)
 
@@ -56,12 +60,23 @@ def profile():
 @login_required
 def jionow():
     if request.method == 'POST':
+        activity = request.form.get('activity')
+        users = User.query.filter(User.interests.contains([activity])).all()
+        top10 = scoring.top10(current_user, users)
+
+        return render_template("result.html", top10)
+
         message = request.form.get('message')
         current_user.message = message
         db.session.commit()
         flash('Details Confirmed!', category='success')
 
-    return render_template("jionow.html", user=current_user)
+    lat, lng = gps_locator.current_latlng()
+    current_user.latitude = lat
+    current_user.longitude = lng
+    current_suburb = gps_locator.find_suburb(lat, lng)
+
+    return render_template("jionow.html", user=current_user, suburb=current_suburb)
 
 @views.route('/delete-note', methods=['POST'])
 def delete_note():
