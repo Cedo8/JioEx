@@ -6,7 +6,7 @@ from .models import Note
 from . import db
 from .models import User
 from . import gps_locator
-from . import scoring
+import scoring
 
 views = Blueprint('views', __name__)
 

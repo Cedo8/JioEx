@@ -1,5 +1,6 @@
 import geocoder
 from geopy.geocoders import Nominatim
+import geopy.distance
 
 
 def current_latlng():
@@ -25,3 +26,6 @@ def find_suburb(lat, lng):
     suburb = address["suburb"]
 
     return suburb
+
+def distance(loc1, loc2):
+    return geopy.distance.geodesic(loc1, loc2).m
