@@ -65,10 +65,16 @@ def jionow():
     # To be updated to take in current location and activity
     if request.method == 'POST':
         activity = request.form.get('activity')
+        location = request.form.get('location')
         users = User.query.filter(User.interests.contains([activity])).all()
         top10 = scoring.top10(current_user, users)
 
-        return render_template("results.html", user_list=top10)
+        # To add code to send the information to backend for processing
+        test_user1 = User(first_name="Test1", age=22, interests=["Swimming", "Dancing"], message="Hi I am Test1.", tele_handle="@Cedo8")
+        test_user2 = User(first_name="Test2", age=19, interests=["Hiking", "Jogging"], message="Hi I am Test2.", tele_handle="@Cedo8")
+        current_user.result = [test_user1, test_user2]
+
+        return render_template("results.html", user=current_user)
 
     lat, lng = gps_locator.current_latlng()
     current_user.latitude = lat

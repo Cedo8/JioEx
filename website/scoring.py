@@ -44,11 +44,11 @@ def top10(curr_user,user_list):
 
 def get_user_info(user):
     user_age = user.age / 100
-    user_sporty = math.log(user.sporty_post * 100) if user.sporty_post !=0 else 1
+    user_fitness = math.log(user.fitness * 100) if user.fitness != 0 else 0
     user_lat = user.latitude
     user_lng = user.longitude
 
-    return [user_age, user_sporty], [user_lat, user_lng]
+    return [user_age, user_fitness], [user_lat, user_lng]
 
 
 def scoring(curr_user, user):

@@ -57,6 +57,7 @@
   </div>
   <div class="form-group">
     <label for="gender">Gender</label>
+    <br>
     <select class="form-select" aria-label="Default select example" id="gender" name="gender">
       <option selected>Select gender</option>
       <option value="Male">Male</option>
@@ -65,14 +66,16 @@
     </select>
 </div>
   <div class="form-group">
-    <label for="interests">Interests</label>
-    <input 
-      type="text" 
-      class="form-control" 
-      id="interests" 
-      name="interests"
-      placeholder="Enter interests (separate by commas)"
-    />
+    <label for="interests">Interests(hold ctrl and click for multiple options)</label>
+    <br>
+    <select class="form-select" aria-label="Default select example" id="interests" name="interests[]" multiple>
+      <option value="Running/Jogging">Running/Jogging</option>
+      <option value="Gym/Working out">Gym/Working out</option>
+      <option value="Swimming/Water sports">Swimming/Water sports</option>
+      <option value="Ball games">Ball games</option>
+      <option value="Indoor sports">Indoor sports</option>
+      <option value="Chill sports">Chill sports</option>
+    </select>
 </div>
     <div class="form-group">
         <label for="password1">Password</label>

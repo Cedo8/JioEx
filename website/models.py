@@ -22,7 +22,6 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(150))
     twitter_handle = db.Column(db.String(150))
     tele_handle = db.Column(db.String(150))
-    notes = db.relationship('Note')  # To be removed
     age = db.Column(db.Integer)
     gender = db.Column(db.String(10))
     interests = db.Column(MutableList.as_mutable(PickleType), default=[])
@@ -31,7 +30,7 @@ class User(db.Model, UserMixin):
     # For algorithm processing
     longitude = db.Column(db.REAL)
     latitude = db.Column(db.REAL)
-    sporty_post = db.Column(db.DECIMAL(0, 6))
+    fitness = db.Column(db.DECIMAL(0, 6))
     positive_post = db.Column(db.DECIMAL(0, 6))
     neutral_post = db.Column(db.DECIMAL(0, 6))
     negative_post = db.Column(db.DECIMAL(0, 6))

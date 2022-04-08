@@ -4,16 +4,22 @@
 <h1 align="center">Here are your matches! </h1>
 <div class="mt-5 text-right"><button onclick="history.back()" class="btn btn-primary">< Back</button></div>
 <div>
+<br>
 <ul class="list-group list-group-flush" id="results">
     {% for user in user.result %}
-    <li class="list-group-item">
-        <h3>{{ user.first_name }}, {{ user.age }}</h3>
-        <br>
-        <h5>{% for interest in user.interests %} -{{ interest }}- {% endfor %}</h5>
-        <br>
-        <h6>{{ user.message }}</h6>
-        <div class="d-flex flex-column align-items-center p-4 py-2"><a href={{ "https://t.me/" + user.tele_handle[1:] }}><img class="rounded-circle" width="30px" src="https://www.freepnglogos.com/uploads/telegram-logo-png-0.png"></a></div>
-    </li>
+    <div  style="background-color:#FAE5D3;">
+        <div class="row">
+            <div class="d-flex flex-column p-4 py-2" style="margin: 30px 20px 20px 20px"><img class="rounded-circle" width="70px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"></div>
+            <div style="margin:20px 30px 20px 30px;">
+            <h3>{{ user.first_name }}, {{ user.age }}</h3>
+            <br>
+            <h5>{% for interest in user.interests %} -{{ interest }}- {% endfor %}</h5>
+            <br>
+            <h6>{{ user.message }}</h6>
+            </div>
+            <div class="d-flex flex-column align-items-right p-4 py-2"><a href={{ "https://t.me/" + user.tele_handle[1:] }}><img class="rounded-circle" width="30px" src="https://www.freepnglogos.com/uploads/telegram-logo-png-0.png"></a></div>
+        </div>
+    </div>
     <br>
     {% endfor %}
 </ul>

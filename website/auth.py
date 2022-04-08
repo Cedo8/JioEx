@@ -2,10 +2,14 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
+import tensorflow as tf
+import tensorflow_hub as hub
 
 from .models import User
 from . import db
 from . import gps_locator
+from tweetRetriever import tweetscraper
+from tweetRetriever import model
 
 auth = Blueprint('auth', __name__)
 
@@ -22,6 +26,11 @@ def login():
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
                 # scrape user twitter and update db
+                twitter_handle = user.twitter_handle
+                tweets_list = tweetscraper.get_tweets(twitter_handle[1:], 50)
+                #model = tf.keras.models.load_model('./trained_model.h5', custom_objects={'KerasLayer': hub.KerasLayer})
+                #classified_tweet = model.classify_tweet(model, tweets_list)
+                #user.fitness = model.calculate_fitness(classified_tweet)
 
                 # last scrape the user twitter(scrape once a week)
 
@@ -59,8 +68,8 @@ def sign_up():
         password2 = request.form.get('password2')
         age = request.form.get('age')
         gender = request.form.get('gender')
-        interests_string = request.form.get('interests')
-        interests = interests_string.split(",")
+        interests = request.form.getlist('interests[]')
+        print(interests)
         lat, lng = gps_locator.current_latlng()
         latitude = lat
         longitude = lng
