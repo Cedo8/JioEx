@@ -6,7 +6,7 @@ from .models import Note
 from . import db
 from .models import User
 from . import gps_locator
-import scoring
+from . import scoring
 
 views = Blueprint('views', __name__)
 
@@ -65,7 +65,7 @@ def jionow():
         users = User.query.filter(User.interests.contains([activity])).all()
         top10 = scoring.top10(current_user, users)
 
-        return render_template("results.html", user=top10)
+        return render_template("results.html", user_list=top10)
 
     lat, lng = gps_locator.current_latlng()
     current_user.latitude = lat

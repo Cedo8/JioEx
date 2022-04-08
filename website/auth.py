@@ -5,7 +5,7 @@ from datetime import datetime
 
 from .models import User
 from . import db
-import gps_locator
+from . import gps_locator
 
 auth = Blueprint('auth', __name__)
 

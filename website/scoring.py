@@ -3,7 +3,7 @@ from numpy import dot
 from numpy.linalg import norm
 import math
 
-from gps_locator import distance
+from .gps_locator import distance
 
 
 def top10(curr_user,user_list):
@@ -44,7 +44,7 @@ def top10(curr_user,user_list):
 
 def get_user_info(user):
     user_age = user.age / 100
-    user_sporty = math.log(user.sporty_post * 100)
+    user_sporty = math.log(user.sporty_post * 100) if user.sporty_post !=0 else 1
     user_lat = user.latitude
     user_lng = user.longitude
 
