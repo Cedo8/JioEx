@@ -4,12 +4,13 @@ from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
 import tensorflow as tf
 import tensorflow_hub as hub
+import os
 
 from .models import User
 from . import db
 from . import gps_locator
 from tweetRetriever import tweetscraper
-from tweetRetriever import model
+from tweetRetriever import classify
 
 auth = Blueprint('auth', __name__)
 
@@ -26,11 +27,11 @@ def login():
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
                 # scrape user twitter and update db
-                twitter_handle = user.twitter_handle
-                tweets_list = tweetscraper.get_tweets(twitter_handle[1:], 50)
+                #twitter_handle = user.twitter_handle
+                #tweets_list = tweetscraper.get_tweets(twitter_handle[1:], 50)
                 #model = tf.keras.models.load_model('./trained_model.h5', custom_objects={'KerasLayer': hub.KerasLayer})
-                #classified_tweet = model.classify_tweet(model, tweets_list)
-                #user.fitness = model.calculate_fitness(classified_tweet)
+                #classified_tweet = classify.classify_tweet(model, tweets_list)
+                #user.fitness = classify.calculate_fitness(classified_tweet)
 
                 # last scrape the user twitter(scrape once a week)
 
@@ -69,11 +70,8 @@ def sign_up():
         age = request.form.get('age')
         gender = request.form.get('gender')
         interests = request.form.getlist('interests[]')
-        print(interests)
-        lat, lng = gps_locator.current_latlng()
-        latitude = lat
-        longitude = lng
-        sporty_post = 0.000000
+        latitude, longitude = gps_locator.current_latlng()
+        fitness = 0.000000
         positive_post = 0.000000
         neutral_post = 0.000000
         negative_post = 0.000000
@@ -101,7 +99,7 @@ def sign_up():
         else:
             new_user = User(email=email, first_name=first_name, twitter_handle=twitter_handle, tele_handle=tele_handle,
                             password=generate_password_hash(password1, method='sha256'), age=age, gender=gender,
-                            interests=interests, latitude=latitude, longitude=longitude, sporty_post=sporty_post,
+                            interests=interests, latitude=latitude, longitude=longitude, fitness=fitness,
                             positive_post=positive_post, neutral_post=neutral_post, negative_post=negative_post)
 
             db.session.add(new_user)
@@ -110,4 +108,8 @@ def sign_up():
             flash('Account created!', category='success')  # add user to database
             return redirect(url_for('views.home'))
 
-    return render_template("sign_up.html", user=current_user)
+    activity_path = os.path.join(os.getcwd(), "website", "option_list/activity.txt")
+    activity_file = open(activity_path, "r")
+    activity_list = activity_file.read().split("\n")
+
+    return render_template("sign_up.html", user=current_user, activity_list=activity_list)

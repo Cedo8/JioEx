@@ -21,28 +21,23 @@
       <div>
         <form method="POST">
           <label for="location">Location:</label>
+          <br/>
           <select class="form-select" aria-label="Default select example">
             <option selected>Select Location</option>
-            <option value="1"></option>
-            <option value="2"></option>
-            <option value="3"></option>
-            <option value="4"></option>
-            <option value="5"></option>
-            <option value="6"></option>
-            <option value="7"></option>
+            {% for suburb in suburb_list %}
+                <option value={{ suburb }}>{{ suburb }}</option>
+            {% endfor %}
           </select>
         <br/>
         <br/>
           <label for="activity">Activity:</label>
+          <br/>
           <select class="form-select" aria-label="Default select example">
             <option selected>Select activity type</option>
-            <option value="1">Running/Jogging</option>
-            <option value="2">Gym/Working out</option>
-            <option value="3">Swimming/Water sports</option>
-            <option value="4">Ball games</option>
-            <option value="5">Indoor sports</option>
-            <option value="6">Chill sports</option>
-            <option value="7">Any</option>
+            {% for activity in activity_list %}
+                <option value={{ activity }}>{{ activity }}</option>
+            {% endfor %}
+            <option value="Any">Any</option>
           </select>
         <br/>
         <br/>

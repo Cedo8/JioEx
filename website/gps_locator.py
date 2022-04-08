@@ -12,9 +12,9 @@ def current_latlng():
 
 def find_latlng(suburb):
     locator = Nominatim(user_agent="GetLocr")
-    get_location = locator.geocoder(suburb)
+    get_location = locator.geocode(suburb)
     lat = get_location.latitude
-    lng = get_location.logitude
+    lng = get_location.longitude
     return lat, lng
 
 
