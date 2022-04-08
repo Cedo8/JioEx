@@ -1,10 +1,12 @@
-from unicodedata import category
 from flask import Blueprint, jsonify, render_template, request, flash
 from flask_login import login_required, current_user
-from .models import Note
-from .models import User
-from . import db
 import json
+
+from .models import Note
+from . import db
+from .models import User
+from . import gps_locator
+from . import scoring
 
 views = Blueprint('views', __name__)
 
@@ -62,20 +64,18 @@ def jionow():
 
     # To be updated to take in current location and activity
     if request.method == 'POST':
-        message = request.form.get('message')
-        current_user.message = message
-        db.session.commit()
-        flash('Details Confirmed!', category='success')
+        activity = request.form.get('activity')
+        users = User.query.filter(User.interests.contains([activity])).all()
+        top10 = scoring.top10(current_user, users)
 
-        # To add code to send the information to backend for processing
-        test_user1 = User(first_name="Test1", age=22, interests=["Swimming", "Dancing"], message="Hi I am Test1.", tele_handle="@Cedo8")
-        test_user2 = User(first_name="Test2", age=19, interests=["Hiking", "Jogging"], message="Hi I am Test2.", tele_handle="@Cedo8")
-        current_user.result = [test_user1, test_user2]
-        
-        # Render the results page instead
-        return results()
+        return render_template("results.html", user_list=top10)
 
-    return render_template("jionow.html", user=current_user)
+    lat, lng = gps_locator.current_latlng()
+    current_user.latitude = lat
+    current_user.longitude = lng
+    current_suburb = gps_locator.find_suburb(lat, lng)
+
+    return render_template("jionow.html", user=current_user, suburb=current_suburb)
 
 @views.route('/results', methods=['GET', 'POST'])
 @login_required

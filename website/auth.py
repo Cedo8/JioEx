@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
-import geocoder
+
+from .models import User
+from . import db
+from . import gps_locator
 
 auth = Blueprint('auth', __name__)
 
@@ -25,9 +26,12 @@ def login():
                 # last scrape the user twitter(scrape once a week)
 
                 # now = datetime.now() --> add this info to user db
-                gps = geocoder.ip('me')
-                user.latitude = gps.latlng[0]
-                user.longitude = gps.latlng[1]
+
+                lat, lng = gps_locator.current_latlng()
+                current_user.latitude = lat
+                current_user.longitude = lng
+
+
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
@@ -57,9 +61,9 @@ def sign_up():
         gender = request.form.get('gender')
         interests_string = request.form.get('interests')
         interests = interests_string.split(",")
-        gps = geocoder.ip('me')
-        latitude = gps.latlng[0]
-        longitude = gps.latlng[1]
+        lat, lng = gps_locator.current_latlng()
+        latitude = lat
+        longitude = lng
         sporty_post = 0.000000
         positive_post = 0.000000
         neutral_post = 0.000000
