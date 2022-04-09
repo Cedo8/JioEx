@@ -59,16 +59,17 @@ def generate_model(path_to_dataset):
     print(classification_report(y_test, y_predicted))
 
 
-def classify_tweet(model, tweets):
-    tweets_predicted = model.predict(tweets)  # returns an array containing the probability of tweet being fitness-related e.g. [[0.6], [0.4], [0.7]]
+def classify_tweet(trained_model, tweets):
+    tweets_predicted = trained_model.predict(tweets)  # returns an array containing the probability of tweet being fitness-related e.g. [[0.6], [0.4], [0.7]]
     print(tweets_predicted)
     return np.where(tweets_predicted > 0.55, 1, 0)  # returns an array containing the predictions e.g. [[1], [0], [1]]
 
 
-def calculate_fitness(prediction_array):
-    num_of_pred = len(prediction_array)
+def calculate_fitness(trained_model, tweets):
+    pred_array = classify_tweet(trained_model, tweets)
+    num_of_pred = len(pred_array)
     positive_pred = 0
-    for pred in prediction_array:
+    for pred in pred_array:
         if pred[0] == 1:
             positive_pred += 1
     return positive_pred/num_of_pred

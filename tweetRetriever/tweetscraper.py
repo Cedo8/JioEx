@@ -1,7 +1,7 @@
 import tweepy
 import re
 
-bearer_token = ""
+bearer_token = "AAAAAAAAAAAAAAAAAAAAAAuXaQEAAAAAXwRFIX0rwmdOjfI9cdX1iayprZY%3DlFPUmEi0amg4yI0Nmco7ybkJUwlHFlm9ni04qNBKBwxtdsa8lR"
 client = tweepy.Client(bearer_token)
 
 
@@ -39,3 +39,5 @@ def search_tweets(query, max_no_result):
 
     tweets = client.search_recent_tweets(query=query, max_results=max_no_result, sort_order='relevancy');
     return clean_tweets(tweets.data)
+
+#print(get_tweets("harrisssss97", 5))

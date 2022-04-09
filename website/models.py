@@ -21,10 +21,11 @@ class User(db.Model, UserMixin):
     message = db.Column(db.String(10000))
 
     # For algorithm processing
+    last_scrape = db.Column(db.DATE)
     longitude = db.Column(db.REAL)
     latitude = db.Column(db.REAL)
-    fitness = db.Column(db.DECIMAL(0, 6))
-    positive_post = db.Column(db.DECIMAL(0, 6))
-    neutral_post = db.Column(db.DECIMAL(0, 6))
-    negative_post = db.Column(db.DECIMAL(0, 6))
-    result = db.Column(MutableList.as_mutable(PickleType), default=[])  # List of Users
+    fitness = db.Column(db.FLOAT)
+    positive_post = db.Column(db.FLOAT)
+    neutral_post = db.Column(db.FLOAT)
+    negative_post = db.Column(db.FLOAT)
+

@@ -18,6 +18,11 @@ def find_latlng(suburb):
     return lat, lng
 
 
+def distance(loc1, loc2):
+    return geopy.distance.geodesic(loc1, loc2).m
+
+
+'''
 def find_suburb(lat, lng):
     locator = Nominatim(user_agent="GetLoc")
     coordinates = f"{lat}, {lng}"
@@ -26,6 +31,4 @@ def find_suburb(lat, lng):
     suburb = address["suburb"]
 
     return suburb
-
-def distance(loc1, loc2):
-    return geopy.distance.geodesic(loc1, loc2).m
+'''

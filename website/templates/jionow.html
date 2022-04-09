@@ -23,7 +23,7 @@
           <label for="location">Location:</label>
           <br/>
           <select class="form-select" aria-label="Default select example" name="location">
-            <option selected>Select Location</option>
+            <option selected value="Current Location">Current Location</option>
             {% for suburb in suburb_list %}
                 <option value="{{ suburb }}">{{ suburb }}</option>
             {% endfor %}

@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
-from datetime import datetime
-#import tensorflow as tf
-#import tensorflow_hub as hub
+from datetime import date
+import tensorflow as tf
+import tensorflow_hub as hub
 import os
 
 from .models import User
@@ -11,10 +11,13 @@ from . import db
 from . import gps_locator
 from tweetRetriever import sentiment
 from tweetRetriever import tweetscraper
-#from tweetRetriever import classify
+from tweetRetriever.classify import calculate_fitness
 
 auth = Blueprint('auth', __name__)
-#model = tf.keras.models.load_model('./trained_model.h5', custom_objects={'KerasLayer': hub.KerasLayer})
+classify_model_path = os.path.join(os.getcwd(), "tweetRetriever/trained_model.h5")
+with tf.device('/cpu:0'):
+    classify_model = tf.keras.models.load_model(classify_model_path, custom_objects={'KerasLayer': hub.KerasLayer})
+
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -27,20 +30,23 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
-                
-                # scrape user twitter and update db
-                twitter_handle = user.twitter_handle
-                tweets_list = tweetscraper.get_tweets(twitter_handle[1:], 50)
-                
-                # Caluclate percentage of fitness tweets using tweet classifier
-                #classified_tweet = classify.classify_tweet(model, tweets_list)
-                #user.fitness = classify.calculate_fitness(classified_tweet)
 
-                # Calculate sentiment using sentiment analyzer
-                sentiment_array = sentiment.extract_sentiment(tweets_list)
-                user.positive_post = sentiment_array[0]
-                user.neutral_post = sentiment_array[1]
-                user.negative_post = sentiment_array[2]
+                curr_date = date.today()
+                day_diff = curr_date - user.last_scrape
+
+                if day_diff.days >= 7:
+                    # scrape user twitter and update db
+                    twitter_handle = user.twitter_handle
+                    tweets_list = tweetscraper.get_tweets(twitter_handle[1:], 50)
+
+                    # Caluclate percentage of fitness tweets using tweet classifier
+                    #user.fitness = calculate_fitness(classify_model, tweets_list)
+
+                    # Calculate sentiment using sentiment analyzer
+                    sentiment_array = sentiment.extract_sentiment(tweets_list)
+                    user.positive_post = sentiment_array[0]
+                    user.neutral_post = sentiment_array[1]
+                    user.negative_post = sentiment_array[2]
 
                 # Obtain user current location
                 lat, lng = gps_locator.current_latlng()
@@ -76,10 +82,24 @@ def sign_up():
         gender = request.form.get('gender')
         interests = request.form.getlist('interests[]')
         latitude, longitude = gps_locator.current_latlng()
-        fitness = 0.000000
-        positive_post = 0.000000
-        neutral_post = 0.000000
-        negative_post = 0.000000
+
+        scrape_date = date.today()
+        # scrape user twitter and update db
+        tweets_list = tweetscraper.get_tweets(twitter_handle[1:], 50)
+
+        # Caluclate percentage of fitness tweets using tweet classifier
+        fitness = calculate_fitness(classify_model, tweets_list)
+
+        # Calculate sentiment using sentiment analyzer
+        sentiment_array = sentiment.extract_sentiment(tweets_list)
+        positive_post = sentiment_array[0]
+        neutral_post = sentiment_array[1]
+        negative_post = sentiment_array[2]
+
+        print(fitness)
+        print(positive_post)
+        print(neutral_post)
+        print(negative_post)
 
         user = User.query.filter_by(email=email).first()
 
@@ -104,12 +124,13 @@ def sign_up():
         else:
             new_user = User(email=email, first_name=first_name, twitter_handle=twitter_handle, tele_handle=tele_handle,
                             password=generate_password_hash(password1, method='sha256'), age=age, gender=gender,
-                            interests=interests, latitude=latitude, longitude=longitude, fitness=fitness,
-                            positive_post=positive_post, neutral_post=neutral_post, negative_post=negative_post)
+                            interests=interests, latitude=latitude, longitude=longitude, last_scrape=scrape_date,
+                            fitness=fitness, positive_post=positive_post, neutral_post=neutral_post,
+                            negative_post=negative_post)
 
             db.session.add(new_user)
             db.session.commit()
-            #login_user(new_user, remember=True)
+            login_user(new_user, remember=True)
             flash('Account created!', category='success')  # add user to database
             return redirect(url_for('views.home'))
 

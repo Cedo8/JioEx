@@ -11,10 +11,12 @@ from . import scoring
 
 views = Blueprint('views', __name__)
 
+
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
     return render_template("home.html", user=current_user)
+
 
 @views.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -45,19 +47,17 @@ def profile():
                     current_user.interests.append(interest)
             db.session.commit()
             flash('Profile updated!', category='success')
-        
+
     return render_template("profile.html", user=current_user)
+
 
 @views.route('/jionow', methods=['GET', 'POST'])
 @login_required
 def jionow():
-
     # To be updated to take in current location and activity
     if request.method == 'POST':
         activity = request.form.get('activity')
         location = request.form.get('location')
-        print(activity)
-        print(location)
 
         if activity == 'Select activity type':
             flash('No Activity Chosen', category='error')
@@ -69,22 +69,23 @@ def jionow():
                 update_location(lat, lng)
 
             if activity != 'Any':
-                users = User.query.filter(User.interests.contains([activity])).all()
+                print(activity)
+
+                users = User.query.filter(User.email != current_user.email).all()
+
+                for usr in users:
+                    if activity not in usr.interests:
+                        users.remove(usr)
+                print(users)
             else:
-                users = User.query.all()
-            print(users)
+                users = User.query.filter(User.email != current_user.email).all()
             top10 = scoring.top10(current_user, users)
 
-            # To add code to send the information to backend for processing
-            test_user1 = User(first_name="Test1", age=22, interests=["Swimming", "Dancing"], message="Hi I am Test1.", tele_handle="@Cedo8")
-            test_user2 = User(first_name="Test2", age=19, interests=["Hiking", "Jogging"], message="Hi I am Test2.", tele_handle="@Cedo8")
-            result = [test_user1, test_user2]
-
-            return render_template("results.html", user=current_user, user_list=result)
+            return render_template("results.html", user=current_user, user_list=top10)
 
     lat, lng = gps_locator.current_latlng()
     update_location(lat, lng)
-    current_suburb = gps_locator.find_suburb(lat, lng)
+    #current_suburb = gps_locator.find_suburb(lat, lng)
 
     suburb_path = os.path.join(os.getcwd(), "website", "option_list/suburb.txt")
     suburb_file = open(suburb_path, "r")
@@ -94,9 +95,10 @@ def jionow():
     activity_file = open(activity_path, "r")
     activity_list = activity_file.read().split("\n")
 
-    return render_template("jionow.html", user=current_user, suburb=current_suburb, suburb_list=suburb_list, activity_list=activity_list)
+    return render_template("jionow.html", user=current_user, suburb_list=suburb_list,
+                           activity_list=activity_list)
+
 
 def update_location(lat, lng):
     current_user.latitude = lat
     current_user.longitude = lng
-

@@ -6,7 +6,7 @@ import math
 from .gps_locator import distance
 
 
-def top10(curr_user,user_list):
+def top10(curr_user, user_list):
 
     curr_user_info, curr_user_dist = get_user_info(curr_user)
     result = {}
@@ -24,7 +24,7 @@ def top10(curr_user,user_list):
         neu_sentiment = usr.neutral_post
         neg_sentiment = usr.negative_post
 
-        score = 0.50 * info_score + 0.45 * location_score + 0.02 * gender_score + 0.03 * (pos_sentiment + neu_sentiment - neg_sentiment)
+        score = 0.50 * info_score + 0.45 * location_score + 0.02 * gender_score + 0.03 * (pos_sentiment + neu_sentiment - 0.01 * neg_sentiment)
 
         if dist > 3500:
             waiting_list[usr] = score
@@ -34,6 +34,7 @@ def top10(curr_user,user_list):
     sorted_result = [k for k, v in sorted(result.items(), key=lambda item: item[1], reverse=True)]
     final_result = sorted_result[:10]
     result_len = len(final_result)
+    print(result)
 
     if result_len < 10:
         sorted_waiting = [k for k, v in sorted(waiting_list.items(), key=lambda item: item[1], reverse=True)]
@@ -56,15 +57,16 @@ def scoring(curr_user, user):
 
 
 '''
-def top10(curr_user,user_list):
+For testing purpose
+def test_top10(curr_user,user_list):
 
-    name_1, curr_user_info, curr_user_dist, h_pos, h_neu, h_neg, u_gender = curr_user #get_user_info(curr_user)
+    name_1, curr_user_info, curr_user_dist, h_pos, h_neu, h_neg, u_gender = curr_user
 
     result = {}
     waiting_list = {}
     i = 2
     for usr in user_list:
-        name, other_user_info, other_user_dist, pos, neu, neg, o_gender = usr  # get_user_info(usr)
+        name, other_user_info, other_user_dist, pos, neu, neg, o_gender = usr
         dist = distance(curr_user_dist, other_user_dist)
 
         info_score = scoring(curr_user_info, other_user_info)
@@ -73,10 +75,7 @@ def top10(curr_user,user_list):
         #print(info_score)
         gender_score = 0.51 if u_gender == o_gender else 0.49
 
-        #pos_sentiment = usr.positive_post
-        #neu_sentiment = usr.neutral_post
-        #neg_sentiment = usr.negative_post
-        score = 0.50 * info_score + 0.45 * location_score + 0.02 * gender_score + 0.03 * (pos + neu - neg)
+        score = 0.50 * info_score + 0.45 * location_score + 0.02 * gender_score + 0.03 * (pos + neu - 0.01 * neg)
         if dist > 3500:
             waiting_list[name] = score
         else:
@@ -86,6 +85,7 @@ def top10(curr_user,user_list):
     sorted_result = [k for k, v in sorted(result.items(), key=lambda item: item[1], reverse=True)]
     final_result = sorted_result[:10]
     result_len = len(final_result)
+    
 
     if result_len < 10:
         sorted_waiting = [k for k, v in sorted(waiting_list.items(), key=lambda item: item[1], reverse=True)]
@@ -108,6 +108,4 @@ test12 = "seng",[0.23, math.log(6)], (1.3899334979896163, 103.90010195607287), 0
 
 result = [test12, test2, test3, test4, test5, test6, test7, test8, test9, test10,test11]
 
-
-
-print(top10(test1,result))'''
+print(test_top10(test1,result))'''
