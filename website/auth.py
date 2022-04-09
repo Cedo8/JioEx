@@ -2,18 +2,19 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
-import tensorflow as tf
-import tensorflow_hub as hub
+#import tensorflow as tf
+#import tensorflow_hub as hub
 import os
 
 from .models import User
 from . import db
 from . import gps_locator
+from tweetRetriever import sentiment
 from tweetRetriever import tweetscraper
-from tweetRetriever import classify
+#from tweetRetriever import classify
 
 auth = Blueprint('auth', __name__)
-
+#model = tf.keras.models.load_model('./trained_model.h5', custom_objects={'KerasLayer': hub.KerasLayer})
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -26,21 +27,25 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
+                
                 # scrape user twitter and update db
-                #twitter_handle = user.twitter_handle
-                #tweets_list = tweetscraper.get_tweets(twitter_handle[1:], 50)
-                #model = tf.keras.models.load_model('./trained_model.h5', custom_objects={'KerasLayer': hub.KerasLayer})
+                twitter_handle = user.twitter_handle
+                tweets_list = tweetscraper.get_tweets(twitter_handle[1:], 50)
+                
+                # Caluclate percentage of fitness tweets using tweet classifier
                 #classified_tweet = classify.classify_tweet(model, tweets_list)
                 #user.fitness = classify.calculate_fitness(classified_tweet)
 
-                # last scrape the user twitter(scrape once a week)
+                # Calculate sentiment using sentiment analyzer
+                sentiment_array = sentiment.extract_sentiment(tweets_list)
+                user.positive_post = sentiment_array[0]
+                user.neutral_post = sentiment_array[1]
+                user.negative_post = sentiment_array[2]
 
-                # now = datetime.now() --> add this info to user db
-
+                # Obtain user current location
                 lat, lng = gps_locator.current_latlng()
                 current_user.latitude = lat
                 current_user.longitude = lng
-
 
                 return redirect(url_for('views.home'))
             else:
@@ -104,7 +109,7 @@ def sign_up():
 
             db.session.add(new_user)
             db.session.commit()
-            # login_user(user, remember=True)
+            #login_user(new_user, remember=True)
             flash('Account created!', category='success')  # add user to database
             return redirect(url_for('views.home'))
 

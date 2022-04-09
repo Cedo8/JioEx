@@ -70,7 +70,7 @@
     <br>
     <select class="form-select" aria-label="Default select example" id="interests" name="interests[]" multiple>
       {% for activity in activity_list %}
-        <option value={{ activity }}>{{ activity }}</option>
+        <option value="{{ activity }}">{{ activity }}</option>
       {% endfor %}
     </select>
 </div>

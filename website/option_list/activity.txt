@@ -1,6 +1,14 @@
-Running/Jogging
-Gym/Working out
-Swimming/Water sports
-Ball games
-Indoor sports
-Chill sports
+Running
+Jogging
+Hiking
+Cycling
+Gym
+Workout
+Dancing
+Swimming
+Water sports
+Basketball
+Football
+Volleyball
+Badminton
+Tennis
