@@ -56,25 +56,31 @@ def jionow():
     if request.method == 'POST':
         activity = request.form.get('activity')
         location = request.form.get('location')
+        print(activity)
+        print(location)
 
-        if not activity:
-            flash('No Activity Chose', category='error')
+        if activity == 'Select activity type':
+            flash('No Activity Chosen', category='error')
+        elif location == 'Select Location':
+            flash('No Location Chosen', category='error')
+        else:
+            if location != 'Current Location':
+                lat, lng = gps_locator.find_latlng(location)
+                update_location(lat, lng)
 
-        if not location:
-            flash('No Location Chose', category='error')
+            if activity != 'Any':
+                users = User.query.filter(User.interests.contains([activity])).all()
+            else:
+                users = User.query.all()
+            print(users)
+            top10 = scoring.top10(current_user, users)
 
+            # To add code to send the information to backend for processing
+            test_user1 = User(first_name="Test1", age=22, interests=["Swimming", "Dancing"], message="Hi I am Test1.", tele_handle="@Cedo8")
+            test_user2 = User(first_name="Test2", age=19, interests=["Hiking", "Jogging"], message="Hi I am Test2.", tele_handle="@Cedo8")
+            result = [test_user1, test_user2]
 
-        lat, lng = gps_locator.find_latlng(location)
-        update_location(lat, lng)
-        users = User.query.filter(User.interests.contains([activity])).all()
-        top10 = scoring.top10(current_user, users)
-
-        # To add code to send the information to backend for processing
-        test_user1 = User(first_name="Test1", age=22, interests=["Swimming", "Dancing"], message="Hi I am Test1.", tele_handle="@Cedo8")
-        test_user2 = User(first_name="Test2", age=19, interests=["Hiking", "Jogging"], message="Hi I am Test2.", tele_handle="@Cedo8")
-        result = [test_user1, test_user2]
-
-        return render_template("results.html", user=current_user, user_list=result)
+            return render_template("results.html", user=current_user, user_list=result)
 
     lat, lng = gps_locator.current_latlng()
     update_location(lat, lng)

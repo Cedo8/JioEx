@@ -1,13 +1,11 @@
 from textblob import TextBlob
-from tweetscraper import get_tweets
 
 
 def get_polarity(text):
     return TextBlob(text).sentiment.polarity
 
 
-def extract_sentiment(username):
-    tweets = get_tweets(username, 50)
+def extract_sentiment(tweets):
     polarity = []
     sentiment = [0, 0, 0]
     for tweet in tweets:
