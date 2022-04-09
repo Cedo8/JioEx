@@ -24,7 +24,7 @@ def top10(curr_user, user_list):
         neu_sentiment = usr.neutral_post
         neg_sentiment = usr.negative_post
 
-        score = 0.50 * info_score + 0.45 * location_score + 0.02 * gender_score + 0.03 * (pos_sentiment + neu_sentiment - 0.01 * neg_sentiment)
+        score = 0.52 * info_score + 0.46 * location_score + 0.01 * gender_score + 0.01 * ( 0.2 * pos_sentiment + 0.14 * neu_sentiment - 0.01 * neg_sentiment)
 
         if dist > 3500:
             waiting_list[usr] = score
@@ -34,7 +34,6 @@ def top10(curr_user, user_list):
     sorted_result = [k for k, v in sorted(result.items(), key=lambda item: item[1], reverse=True)]
     final_result = sorted_result[:10]
     result_len = len(final_result)
-    print(result)
 
     if result_len < 10:
         sorted_waiting = [k for k, v in sorted(waiting_list.items(), key=lambda item: item[1], reverse=True)]

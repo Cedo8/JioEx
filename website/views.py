@@ -69,17 +69,14 @@ def jionow():
                 update_location(lat, lng)
 
             if activity != 'Any':
-                print(activity)
-
                 users = User.query.filter(User.email != current_user.email).all()
-
+                final_users = []
                 for usr in users:
-                    if activity not in usr.interests:
-                        users.remove(usr)
-                print(users)
+                    if activity in usr.interests:
+                        final_users.append(usr)
             else:
-                users = User.query.filter(User.email != current_user.email).all()
-            top10 = scoring.top10(current_user, users)
+                final_users = User.query.filter(User.email != current_user.email).all()
+            top10 = scoring.top10(current_user, final_users)
 
             return render_template("results.html", user=current_user, user_list=top10)
 
