@@ -80,7 +80,33 @@ if __name__ == '__main__':
         generate_model('./dataset.csv')
     else:
         print("Model already trained.")
-    
-    model = tf.keras.models.load_model('./trained_model.h5', custom_objects={'KerasLayer':hub.KerasLayer})
-    prediction_array = classify_tweet(model, ["What a great workout!", "This assignment is so difficult..."])
-    print(calculate_fitness(prediction_array))
+
+    with tf.device('/cpu:0'):
+        model = tf.keras.models.load_model('./trained_model.h5', custom_objects={'KerasLayer':hub.KerasLayer})
+    sporty_test_sent = [
+        "How the humble Exercise / Swiss Ball can be an older adult's ideal fitness companion",
+        "How seniors and older adults can benefit from a structured and supervised home fitness program",
+        "Why it makes more sense to workout with a partner or your significant other in your senior/older adult years:",
+        "I'm glad that he can start swim lessons soon.",
+        "The poor boy has been asking, \"When am I going to swim class mama?\"",
+        "And he keeps insisting to go inside the swim school every time we sent his sister for class.",
+        "I have been a runner over the past 12 years of my life. Running had brought me so much pain, tears, and joy. Here are some of the things that I had learned through the journey.",
+        "Ended the month with an easy 6km after an enjoyable weekend with friends. Disappointed with the volume of this short month but time to sort myself out and get the machine running for March.",
+        "Would say that this month was evenly spread out in terms of mileage. Did some harder workouts, swam more and also ran more with friends ",
+        "Friends Who Sweat Together, Stay Together. Make Fitness Your Lifestyle!"
+    ]
+    non_sporty_test_sent = [
+        "Happy New Year! May Joy, Peace, Good Health & Success be with each and every one of you! Best wishes from",
+        "I think this would be good for our community cats too but then again, we have assholes who don't like that we have nice things for non-humans.",
+        "being told from birth to never pursue the arts lmao",
+        "My kind of flight",
+        "Achievement unlocked! Within the 9 days, we had completed 418.52 of 100 km, raised S$1938 so far.",
+        "Let's welcome the year of Tiger with fun and joy! Wishing you all good health and prosperity in the upcoming year! ",
+        "And we're bringing public sector innovations along.",
+        "I stepped away from music quite a while ago, for a number of reasons, but I still really love it, so the kindness and support I’ve received the past few days just for a little tiny toe dip back into some music means the absolute world to me",
+        "This is clearly something I would not have done a year ago but time to muster the courage to choose the tougher but more meaningful route",
+        "I used to think people are weird for liking things that does not fit the social norm but I am beginning to change this perception. It might actually be cool."
+    ]
+    prediction_array = classify_tweet(model, non_sporty_test_sent)
+    print(prediction_array)
+    #print(calculate_fitness(prediction_array))

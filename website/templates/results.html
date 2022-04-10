@@ -2,7 +2,8 @@
 
 {% block content %} 
 <h1 align="center">Here are your matches! </h1>
-<div class="mt-5 text-right"><button onclick="history.back()" class="btn btn-primary">< Back</button></div>
+
+    <div class="mt-5 text-right"><a href="{{ url_for('views.jionow') }}"><button class="btn btn-primary">< Back</button></a></div>
 
 <br>
 {% for usr in user_list %}
