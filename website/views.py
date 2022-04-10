@@ -1,8 +1,7 @@
 import os
 
-from flask import Blueprint, jsonify, render_template, request, flash
+from flask import Blueprint, render_template, request, flash
 from flask_login import login_required, current_user
-import json
 
 from . import db
 from .models import User
@@ -82,7 +81,6 @@ def jionow():
 
     lat, lng = gps_locator.current_latlng()
     update_location(lat, lng)
-    #current_suburb = gps_locator.find_suburb(lat, lng)
 
     suburb_path = os.path.join(os.getcwd(), "website", "option_list/suburb.txt")
     suburb_file = open(suburb_path, "r")

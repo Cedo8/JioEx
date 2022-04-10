@@ -1,7 +1,7 @@
 import tweepy
 import re
 
-bearer_token = "AAAAAAAAAAAAAAAAAAAAAAuXaQEAAAAAXwRFIX0rwmdOjfI9cdX1iayprZY%3DlFPUmEi0amg4yI0Nmco7ybkJUwlHFlm9ni04qNBKBwxtdsa8lR"
+bearer_token = ""
 client = tweepy.Client(bearer_token)
 
 
@@ -31,6 +31,7 @@ def get_tweets(username, max_num):
     return clean_tweets(tweets.data)
 
 
+# for manual annotate classification model
 def search_tweets(query, max_no_result):
     if max_no_result < 10:
         max_no_result = 10
@@ -40,4 +41,5 @@ def search_tweets(query, max_no_result):
     tweets = client.search_recent_tweets(query=query, max_results=max_no_result, sort_order='relevancy');
     return clean_tweets(tweets.data)
 
-#print(get_tweets("harrisssss97", 5))
+# testing tweets scraping
+# print(get_tweets("harrisssss97", 5))

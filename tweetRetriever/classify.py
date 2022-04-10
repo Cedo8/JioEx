@@ -83,6 +83,7 @@ if __name__ == '__main__':
 
     with tf.device('/cpu:0'):
         model = tf.keras.models.load_model('./trained_model.h5', custom_objects={'KerasLayer':hub.KerasLayer})
+    # for report classification evaluation
     sporty_test_sent = [
         "How the humble Exercise / Swiss Ball can be an older adult's ideal fitness companion",
         "How seniors and older adults can benefit from a structured and supervised home fitness program",

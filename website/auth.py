@@ -14,6 +14,7 @@ from tweetRetriever import tweetscraper
 from tweetRetriever.classify import calculate_fitness
 
 auth = Blueprint('auth', __name__)
+# loading tweet classification model
 classify_model_path = os.path.join(os.getcwd(), "tweetRetriever/trained_model.h5")
 with tf.device('/cpu:0'):
     classify_model = tf.keras.models.load_model(classify_model_path, custom_objects={'KerasLayer': hub.KerasLayer})
