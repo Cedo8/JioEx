@@ -26,10 +26,6 @@ def profile():
         tele_handle = request.form.get('tele_handle')
         age = request.form.get('age')
         message = request.form.get('message')
-        additional_interests_string = request.form.get('interests')
-        additional_interests = additional_interests_string.split(",")
-        if len(additional_interests) == 1 and additional_interests[0] == '':
-            additional_interests = []
 
         if len(first_name) < 2:
             flash('First name must be greater than 1 character.', category='error')
@@ -41,9 +37,6 @@ def profile():
             current_user.tele_handle = tele_handle
             current_user.age = int(age)
             current_user.message = message if len(message) > 0 else current_user.message
-            if len(additional_interests) > 0:
-                for interest in additional_interests:
-                    current_user.interests.append(interest)
             db.session.commit()
             flash('Profile updated!', category='success')
 
